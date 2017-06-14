@@ -27,5 +27,34 @@ class Universe(object):
         :param a: a real value
         :param b: a real value
         :return: distance as a real value
+        :raise ValueError: when the a or the b is out of the domain of the universe
         """
-        pass
+        if a > b:
+            a, b = b, a
+        distance = self.calc_value(b) - self.calc_value(a)
+        return distance
+
+    def calc_value(self, x):
+        """
+        Calculate the value of the universe at the given point.
+        :param x: a real value
+        :return: the value of the universe as a real value
+        :raise ValueError: when the x is out of the domain of the universe
+        """
+        term_centers = [term.center for term in self._terms]
+        if x < min(term_centers):
+            raise ValueError('The value {} is below the minimal domain value of the universe!'.format(x))
+        if x > max(term_centers):
+            raise ValueError('The value {} is above the maximal domain value of the universe!'.format(x))
+        left_term = term_centers[0]
+        right_term = term_centers[0]
+        for term in term_centers:
+            if x > term.center:
+                if x - term.center < x - left_term.center:
+                    left_term = term
+            else:
+                if term.center - x < right_term.center - x:
+                    right_term = term
+        ratio = (x - left_term.center) / (right_term.center - left_term.center)
+        y = left_term.value + (right_term.value - left_term.value) * ratio
+        return y
