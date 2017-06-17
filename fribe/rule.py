@@ -21,3 +21,7 @@ class Rule(object):
         if antecedent_name in self._predicates:
             raise ValueError('The predicate "{}" has already added to the rule!'.format(antecedent_name))
         self._predicates[antecedent_name] = term_name
+
+    @property
+    def predicates(self):
+        return self._predicates
