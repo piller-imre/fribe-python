@@ -58,3 +58,12 @@ class Universe(object):
         ratio = (x - left_term.center) / (right_term.center - left_term.center)
         y = left_term.value + (right_term.value - left_term.value) * ratio
         return y
+
+    def get_term(self, name):
+        """
+        Get the term by name.
+        :param name: the name of the term
+        :return: a term object
+        """
+        # TODO: Use ValueError instead of KeyError!
+        return self._terms[name]

@@ -73,11 +73,42 @@ class RuleBase(object):
                 raise ValueError('The universe is missing for the {}!'.format(antecedent))
         return predicate_distances
 
-    def calc_consequence(self, antecedent_values):
+    def collect_consequence_symbols(self):
+        """
+        Collect the consequence symbols of the rules.
+        :return: the set of consequence symbol names.
+        """
+        consequence_symbols = set()
+        for rule in self._rules:
+            consequence_symbols.add(rule.consequent)
+        return consequence_symbols
+
+    def calc_distances_by_consequences(self, observation):
+        """
+        Calculate the rule distances grouped by consequence symbols.
+        :return: a dictionary where the keys are the consequent symbols the values are the list of rule distances.
+        """
+        consequence_symbols = self.collect_consequence_symbols()
+        distances = dict.fromkeys(consequence_symbols, [])
+        for rule in self._rules:
+            distances[rule.consequent].append(self.calc_distance(observation, rule))
+        return distances
+
+    def calc_consequence(self, observation):
         """
         Calculate the consequence of the rule base.
-        :param antecedent_values: the values of the antecedents as a dictionary
+        :param observation: the values of the antecedents as a dictionary
         :return: the calculated consequent value as a real number
         """
-        # TODO: Calculate the distances of the rules grouped by the consequences!
-        pass
+        distances = self.calc_distances_by_consequences(observation)
+        # TODO: Consider exact matches!
+        weight_sum = 0.0
+        consequence = 0.0
+        for symbol, distances in distances.items():
+            value = self._universes[self._name].get_term(symbol).value
+            for distance in distances:
+                weight = 1.0 / (distance ** 2)
+                consequence += value * weight
+                weight_sum += weight
+        consequence /= weight_sum
+        return consequence

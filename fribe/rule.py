@@ -25,3 +25,7 @@ class Rule(object):
     @property
     def predicates(self):
         return self._predicates
+
+    @property
+    def consequent(self):
+        return self._consequent
