@@ -1,0 +1,145 @@
+\documentclass[a4paper,12pt]{article}
+
+% Set margins
+\usepackage[hmargin=2.5cm, vmargin=3cm]{geometry}
+
+\frenchspacing
+
+% Language packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+% \usepackage[magyar]{babel}
+
+% AMS
+\usepackage{amssymb,amsmath}
+
+% Graphic packages
+\usepackage{graphicx}
+
+% Colors
+\usepackage{color}
+\usepackage[usenames,dvipsnames]{xcolor}
+
+% Enumeration
+\usepackage{enumitem}
+
+% Links
+\usepackage{hyperref}
+
+% Question
+\newenvironment{question}[1]
+{\noindent\textcolor{OliveGreen}{$\circ$ \textit{#1}}
+
+\smallskip
+
+\color{Gray}
+
+}{\bigskip}
+
+% Task
+\newenvironment{task}[1]
+{\noindent\textcolor{RoyalBlue}{$\circ$ \textit{#1}}
+
+\smallskip
+
+\color{Gray}
+
+}{\bigskip}
+
+% Notification
+\newenvironment{notification}[1]
+{\noindent\textcolor{Peach}{$\circ$ \textit{#1}}
+
+\smallskip
+
+\color{Gray}
+
+}{\bigskip}
+
+% Problem
+\newenvironment{problem}[1]
+{\noindent\textcolor{OrangeRed}{$\circ$ \textit{#1}}
+
+\smallskip
+
+\color{Gray}
+
+}{\bigskip}
+
+% Solution
+\newenvironment{solution}
+{\noindent\color{Violet}}{\bigskip}
+
+% Starred
+\newenvironment{starred}
+{\noindent\color{Maroon}}{\bigskip}
+
+\begin{document}
+
+\begin{center}
+    \Large \textbf{Negation Operator}
+\end{center}
+
+\section{Introduction}
+
+We use \textit{conjunction between predicates} and \textit{disjunction between rules}.
+
+We would like to extend the expressive power of the behavior description language by using negation. The fundamental problem is that in the case of multi-valued logic the negation cannot be defined.
+
+We can define the negation on antecedent level. 
+
+\section{Rule Calculations}
+
+At the first step, we calculate the distance of the observation from the predicates at the given dimensions.
+
+The universe is a non-decreasing function, $u: [a, b] \rightarrow [0, 1]$, where $a, b \in \mathbb{R}$. We calculate the distance of $p$ and $q$ points ($p, q \in [a, b]$) as $d = \int_{p}^{q} u(x) dx$.
+
+When the $x$ is the observed value on the given universe and $p$ is the symbol in the predicate, we calculate the distance of $p = x$ as
+$$
+d(x) = \int_{x}^{p} u(x) dx
+$$
+
+We can define the distance of $p \neq x$ as
+$$
+d(\overline{x}) = 1 - d(x) = 1 - \int_{x}^{p} u(x) dx
+$$
+
+The definition guarantees that $t(\overline{\overline{x}}) = d(x)$.
+
+\section{De Morgan Rule}
+
+There are disjunctions between the rules of the rulebase. By the introduction of the negation operation we have to ensure that the effect of
+\begin{equation}
+\overline{p_1 = x_1 \wedge p_2 = x_2 \wedge \ldots \wedge p_n = x_n} \Rightarrow c
+\label{eq:first}
+\end{equation}
+rule is equals with the effect of the following rules
+\begin{equation}
+p_1 \neq x_1 \Rightarrow c, \quad p_2 \neq x_2 \Rightarrow c, \quad \cdots, \quad p_n \neq x_n \Rightarrow c.
+\label{eq:second}
+\end{equation}
+
+In the evaluation process, we can calculate the rule distances independently. The Shepard interpolation is invariant to the order of the weights. Therefore, it is enough to check the equivalence in cases where the consequent value is $c$. (In general, single consequent value is not enough for valid rulebases.)
+
+The Shepard interpolation calculates the weights as the reciprocal of the distance:
+$$
+w_i = \dfrac{1}{d_{i}^p},
+$$
+where the $p$ is the Shepard power.
+
+% NOTE: This p is not the same as the p in the previous section!
+
+The result remains the same in case when the weight of the rule in \ref{eq:first} is equals with the sum of the weights in \ref{eq:second}.
+
+\section{Requirements}
+
+Let define a function which calculates the rule distance from the predicate distances as $r(\textbf{d})$, where $\textbf{d} \in \mathbb{R}^n$. (\textit{It is the euclidean distance in the current case.})
+
+Let define a function which calculates the rulebase consequent from the rule distances and from the consequent values of the rules: $s(\textbf{d}, \textbf{c})$, where $\textbf{d}, \textbf{c} \in \mathbb{R}^n$.
+
+We would like to find appropriate $r$ and $s$ function which fulfils the equation
+\begin{equation}
+s(1 - r(\textbf{d}), c) = s(r(1 - \textbf{d}), c).
+\end{equation}
+
+\end{document}
