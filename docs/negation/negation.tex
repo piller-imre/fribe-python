@@ -142,4 +142,42 @@ We would like to find appropriate $r$ and $s$ function which fulfils the equatio
 s(1 - r(\textbf{d}), c) = s(r(1 - \textbf{d}), c).
 \end{equation}
 
+\section{Continuous Extension of Logical Operators}
+
+\subsection{Requirements}
+
+\noindent \textbf{Negation}
+\begin{itemize}
+\item $\neg: [0, 1] \rightarrow [0, 1]$
+\item $\neg \neg x = x$
+\item $\neg 0 = 1, \neg 1 = 0$
+\item $\neg 0.5 = 0.5$ for symmetricity
+\end{itemize}
+
+\noindent \textbf{Conjunction}, \textbf{Disjunction}
+\begin{itemize}
+\item $\wedge: [0, 1]^2 \rightarrow [0, 1]$, $\vee: [0, 1]^2 \rightarrow [0, 1]$
+\item commutative and associative
+\item the corner cases must match with the two-valued logic, therefore
+$$
+0 \wedge 0 = 0, 0 \wedge 1 = 0, 1 \wedge 1 = 1, 0 \vee 0 = 0, 0 \vee 1 = 1, 1 \vee 1 = 1
+$$
+\item from the De Morgan rule and from symmetrical reasons $0.5 \wedge 0.5 = 0.5$, $0.5 \vee 0.5 = 0.5$
+\end{itemize}
+
+\subsection{Possible operators}
+
+The $\neg x \equiv 1 - x$ is a beneficial choice, because we do not assume any non-linearity.
+
+The $\wedge$ and $\vee$ operators must fulfils the following equation.
+\begin{equation}
+1 - (p \wedge q) =  (1 - p) \vee (1 - q)
+\end{equation}
+
+The previously mentioned requirements makes necessary to choose the $\min$ and $\max$ functions.
+\begin{equation}
+1 - \min(p, q) = \max(1 - p, 1 - q)
+\end{equation}
+Any other selection of operators assumes asymmetricity.
+
 \end{document}
