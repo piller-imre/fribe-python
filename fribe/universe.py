@@ -41,22 +41,43 @@ class Universe(object):
         :return: the value of the universe as a real value
         :raise ValueError: when the x is out of the domain of the universe
         """
-        term_centers = [term.center for term in self._terms]
-        if x < min(term_centers):
-            raise ValueError('The value {} is below the minimal domain value of the universe!'.format(x))
-        if x > max(term_centers):
-            raise ValueError('The value {} is above the maximal domain value of the universe!'.format(x))
-        left_term = term_centers[0]
-        right_term = term_centers[0]
-        for term in term_centers:
-            if x > term.center:
-                if x - term.center < x - left_term.center:
-                    left_term = term
+        if not self.is_in_domain(x):
+            raise ValueError('The value {} is out of the domain!'.format(x))
+        left_term, right_term = self.find_neighbor_terms(x)
+        y = self.interpolate(left_term.center, left_term.value, right_term.center, right_term.value, x)
+        return y
+
+    def find_neighbor_terms(self, x):
+        """
+        Find the neighbor terms of the given value.
+        :param x: a real value
+        :return: the two nearest terms at the left and right side of x
+        """
+        terms = sorted(self._terms.values(), key=lambda term: term.center)
+        i = 0
+        while i < len(terms):
+            if terms[i].center == x:
+                return terms[i], terms[i]
+            elif terms[i].center < x:
+                if i < len(terms) - 1:
+                    return terms[i], terms[i + 1]
+                else:
+                    raise ValueError('The value {} is out of the domain!'.format(x))
+
+    def interpolate(self, x0, y0, x1, y1, x):
+        """
+        Linear interpolation
+        :return: the interpolated value
+        """
+        if x < x0 or x > x1:
+            raise ValueError('The {} is not in range [{}, {}]!'.format(x, x0, x1))
+        if x0 == x1:
+            if y0 == y1:
+                return y0
             else:
-                if term.center - x < right_term.center - x:
-                    right_term = term
-        ratio = (x - left_term.center) / (right_term.center - left_term.center)
-        y = left_term.value + (right_term.value - left_term.value) * ratio
+                raise ValueError('Invalid interpolation points!')
+        ratio = (x - x0) / (x1 - x0)
+        y = y0 + (y1 - y0) * ratio
         return y
 
     def get_term(self, name):
@@ -65,5 +86,23 @@ class Universe(object):
         :param name: the name of the term
         :return: a term object
         """
-        # TODO: Use ValueError instead of KeyError!
-        return self._terms[name]
+        if name in self._terms:
+            return self._terms[name]
+        else:
+            raise ValueError('The term {} has not defined on the universe!'.format(name))
+
+    def count_terms(self):
+        """
+        Count the terms of the universe.
+        :return: the number of terms
+        """
+        return len(self._terms)
+
+    def is_in_domain(self, x):
+        """
+        Check that the value is on the defined domain.
+        :param x: a real value
+        :return: True, when the x is in the domain, else False
+        """
+        centers = [term.center for term in self._terms.values()]
+        return min(centers) <= x <= max(centers)
