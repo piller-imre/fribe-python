@@ -19,15 +19,15 @@ class RuleBase(object):
     def name(self):
         return self._name
 
-    def add_universe(self, universe):
+    def add_universe(self, name, universe):
         """
         Add new universe to the rule base.
         :param universe: a universe object
         :return: None
         """
-        if universe.name in self._universes:
-            raise ValueError('The universe "{}" has already added to the rulebase!'.format(universe.name))
-        self._universes[universe.name] = universe
+        if name in self._universes:
+            raise ValueError('The universe "{}" has already added to the rulebase!'.format(name))
+        self._universes[name] = universe
 
     def add_rule(self, rule):
         """
@@ -59,9 +59,10 @@ class RuleBase(object):
         :return: a list of floating point values
         """
         predicate_distances = []
-        for antecedent, expected_value in rule.predicates.items():
+        for antecedent, expected_symbol in rule.predicates.items():
             if antecedent in self._universes:
                 if antecedent in observation:
+                    expected_value = self._universes[antecedent].get_term(expected_symbol).center
                     universe = self._universes[antecedent]
                     value = observation[antecedent]
                     distance = universe.calc_distance(value, expected_value)
@@ -89,7 +90,7 @@ class RuleBase(object):
         :return: a dictionary where the keys are the consequent symbols the values are the list of rule distances.
         """
         consequence_symbols = self.collect_consequence_symbols()
-        distances = dict.fromkeys(consequence_symbols, [])
+        distances = {symbol: [] for symbol in consequence_symbols}
         for rule in self._rules:
             distances[rule.consequent].append(self.calc_distance(observation, rule))
         return distances
@@ -101,14 +102,44 @@ class RuleBase(object):
         :return: the calculated consequent value as a real number
         """
         distances = self.calc_distances_by_consequences(observation)
-        # TODO: Consider exact matches!
-        weight_sum = 0.0
         consequence = 0.0
-        for symbol, distances in distances.items():
-            value = self._universes[self._name].get_term(symbol).value
-            for distance in distances:
-                weight = 1.0 / (distance ** 2)
-                consequence += value * weight
-                weight_sum += weight
-        consequence /= weight_sum
+        if self.has_zero_distance(distances):
+            consequence = self.calc_matching_mean(distances)
+        else:
+            weight_sum = 0.0
+            for symbol, distances in distances.items():
+                value = self._universes[self._name].get_term(symbol).value
+                for distance in distances:
+                    weight = 1.0 / (distance ** 2)
+                    consequence += value * weight
+                    weight_sum += weight
+            consequence /= weight_sum
         return consequence
+
+    @staticmethod
+    def has_zero_distance(distances):
+        """
+        Check that is there a zero distance in distance values.
+        :param distances: {consequent symbol: [distances]} dictionary
+        :return: True, when there is a zero value, else False
+        """
+        for value in distances.values():
+            if 0.0 in value:
+                return True
+        return False
+
+    def calc_matching_mean(self, distances):
+        """
+        Calculate the mean of the matching values.
+        :param distances: {consequent symbol: [distances]} dictionary
+        :return: the mean of the values where the distance is zero
+        """
+        s = 0.0
+        n = 0
+        for consequent, distance in distances.items():
+            c = distance.count(0.0)
+            if c > 0:
+                s += c * self._universes[self._name].get_term(consequent).value
+                n += c
+        s /= n
+        return s

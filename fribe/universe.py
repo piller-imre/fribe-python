@@ -32,6 +32,10 @@ class Universe(object):
         if a > b:
             a, b = b, a
         distance = self.calc_value(b) - self.calc_value(a)
+        # NOTE: The normalization step is necessary!
+        max_value = max([term.value for term in self._terms.values()])
+        min_value = min([term.value for term in self._terms.values()])
+        distance /= max_value - min_value
         return distance
 
     def calc_value(self, x):
@@ -62,9 +66,11 @@ class Universe(object):
                 if i < len(terms) - 1:
                     return terms[i], terms[i + 1]
                 else:
-                    raise ValueError('The value {} is out of the domain!'.format(x))
+                    raise ValueError('The value {} is above the domain!'.format(x))
+        raise ValueError('The value {} is below the domain!'.format(x))
 
-    def interpolate(self, x0, y0, x1, y1, x):
+    @staticmethod
+    def interpolate(x0, y0, x1, y1, x):
         """
         Linear interpolation
         :return: the interpolated value
