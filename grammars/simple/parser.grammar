@@ -1,0 +1,114 @@
+expression "parser"
+nodes
+1 start "" 25 233
+2 finish "" 1222 242
+3 token "universe" 283 102
+4 token "text" 536 103
+5 token "description" 172 207
+6 token "text" 496 207
+7 token "text" 290 336
+8 token "number" 486 337
+9 token "number" 696 339
+10 token "end" 816 104
+11 connection "" 47 86
+12 connection "" 1082 95
+13 router "empty" 1161 168
+14 token "rulebase" 301 404
+15 token "text" 563 406
+16 token "description" 665 405
+17 token "text" 957 406
+18 token "rule" 264 538
+19 token "description" 206 625
+20 token "text" 461 624
+21 token "text" 551 539
+22 token "when" 655 538
+23 token "text" 715 717
+24 token "is" 816 718
+25 token "text" 1073 720
+26 token "and" 896 652
+27 token "end" 1066 548
+28 operation "create_universe" 153 103
+29 operation "set_universe_name" 384 103
+30 operation "set_universe_description" 284 208
+31 operation "create_term" 173 316
+32 operation "set_center" 388 337
+33 operation "set_value" 595 338
+34 operation "add_term" 795 349
+35 operation "create_rulebase" 168 405
+36 operation "set_rulebase_name" 407 403
+37 operation "set_rulebase_description" 767 404
+38 operation "create_rule" 158 539
+39 operation "add_universe" 937 105
+40 operation "add_rule" 1178 550
+41 operation "add_rulebase" 1164 395
+42 operation "set_rule_description" 303 624
+43 operation "create_predicate" 600 641
+44 operation "set_consequence" 408 538
+45 operation "set_predicate_name" 547 717
+46 operation "set_predicate_value" 915 720
+47 operation "add_predicate" 1174 721
+48 token "end" 1064 394
+49 ground "" 77 702
+50 error "Invalid token!" 180 703
+51 finish "" 305 704
+edges
+1 11
+3 29
+4 5
+4 10
+4 31
+5 30
+6 10
+6 31
+7 32
+8 33
+9 34
+10 39
+11 28
+11 35
+12 11
+12 13
+13 2
+14 36
+15 16
+15 38
+16 37
+17 38
+18 19
+18 44
+19 42
+20 44
+21 22
+22 43
+23 24
+24 46
+25 47
+26 43
+27 40
+28 3
+29 4
+30 6
+31 7
+32 8
+33 9
+34 10
+34 31
+35 14
+36 15
+37 17
+38 18
+39 12
+40 38
+40 48
+41 12
+42 20
+43 45
+44 21
+45 23
+46 25
+47 26
+47 27
+48 41
+49 50
+50 51
+
