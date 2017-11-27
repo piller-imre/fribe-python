@@ -7,7 +7,19 @@ class Engine:
     """Represents the behavior engine."""
 
     def __init__(self):
+        self._universes = {}
         self._rulebases = {}
+
+    def add_universe(self, universe):
+        """
+        Add a new universe object to the engine.
+        :param universe: a universe object
+        :return: None
+        :raise ValueError: when the universe has already exists in the engine
+        """
+        if universe.name in self._universes:
+            raise ValueError('The universe "{}" has already added to the engine!'.format(universe.name))
+        self._universes[universe.name] = universe
 
     def add_rulebase(self, rulebase):
         """

@@ -21,10 +21,34 @@ class Term(object):
     def name(self):
         return self._name
 
+    def set_name(self, name):
+        """
+        Set the name of the term.
+        :param name: the name of the term
+        :return: None
+        """
+        self._name = name
+
     @property
     def center(self):
         return self._center
 
+    def set_center(self, center):
+        """
+        Set the center of the term.
+        :param center: the center of the term
+        :return: None
+        """
+        self._center = center
+
     @property
     def value(self):
         return self._value
+
+    def set_value(self, value):
+        """
+        Set the value of the term.
+        :param value: the value of the term
+        :return: None
+        """
+        self._value = value

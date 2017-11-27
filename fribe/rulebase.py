@@ -6,12 +6,13 @@ Rule base class definition
 class RuleBase(object):
     """Represents a rule base."""
 
-    def __init__(self, name):
+    def __init__(self, name=''):
         """
         Initialize a rule base with the given name.
         :param name: the unique name of the rule base
         """
         self._name = name
+        self._description = ''
         self._universes = {}
         self._rules = []
 
@@ -19,12 +20,33 @@ class RuleBase(object):
     def name(self):
         return self._name
 
+    def set_name(self, name):
+        """
+        Set the name of the rulebase.
+        :param name: the new name of the universe
+        :return: None
+        """
+        self._name = name
+
+    @property
+    def description(self):
+        return self._description
+
+    def set_description(self, description):
+        """
+        Set the description of the rulebase.
+        :param description: the description of the rulebase
+        :return: None
+        """
+        self._description = description
+
     def add_universe(self, name, universe):
         """
         Add new universe to the rule base.
         :param universe: a universe object
         :return: None
         """
+        # WARN: Deprecated! Use add_universe method of the engine instead!
         if name in self._universes:
             raise ValueError('The universe "{}" has already added to the rulebase!'.format(name))
         self._universes[name] = universe

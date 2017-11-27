@@ -7,7 +7,34 @@ class Universe(object):
     """Represents the universe of discourse."""
 
     def __init__(self):
+        # TODO: Inherit all class with name and description from the Block base class!
+        self._name = ''
+        self._description = ''
         self._terms = {}
+
+    @property
+    def name(self):
+        return self._name
+
+    def set_name(self, name):
+        """
+        Set the name of the universe.
+        :param name: the name of the universe
+        :return: None
+        """
+        self._name = name
+
+    @property
+    def description(self):
+        return self._description
+
+    def set_description(self, description):
+        """
+        Set the description of the universe.
+        :param description: the description of the universe
+        :return: None
+        """
+        self._description = description
 
     def add_term(self, term):
         """

@@ -129,3 +129,17 @@ class TokenizerTest(unittest.TestCase):
             token = parser.get_token()
             self.assertEqual('number', token.type)
             self.assertEqual(numbers.pop(0), token.value)
+
+    def test_finish_token(self):
+        char_classifier = CharClassifier()
+        grammar = Grammar(filename='../grammars/simple/tokenizer.grammar', classifier=char_classifier)
+        source = SourceString('end')
+        parser = Tokenizer(grammar, source)
+        parser.parse()
+        token = parser.get_token()
+        self.assertEqual('keyword', token.type)
+        self.assertEqual('end', token.value)
+        parser.parse()
+        token = parser.get_token()
+        self.assertEqual('empty', token.type)
+        self.assertEqual('', token.value)

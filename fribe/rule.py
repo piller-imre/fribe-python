@@ -7,11 +7,24 @@ class Rule(object):
     """Represents a rule."""
 
     def __init__(self, predicates=None, consequent=None):
+        self._description = ''
         if predicates is None:
             self._predicates = {}
         else:
             self._predicates = predicates
         self._consequent = consequent
+
+    @property
+    def description(self):
+        return self._description
+
+    def set_description(self, description):
+        """
+        Set the description of the rule.
+        :param description: the description of the rule
+        :return: None
+        """
+        self._description = description
 
     def add_predicate(self, antecedent_name, term_name):
         """
@@ -28,7 +41,7 @@ class Rule(object):
     def set_consequent(self, consequent):
         """
         Set the consequent value of the rule.
-        :param consequent: the required consequent value
+        :param consequent: the consequent value as a string of term name
         :return: None
         """
         self._consequent = consequent
