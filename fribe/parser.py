@@ -37,6 +37,10 @@ class Parser(parser.Parser):
         self._rule = None
         self._predicate = None
 
+    @property
+    def engine(self):
+        return self._engine
+
     def operate(self, operation, token):
         """
         Apply the required operation.

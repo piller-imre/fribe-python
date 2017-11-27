@@ -9,6 +9,7 @@ class Engine:
     def __init__(self):
         self._universes = {}
         self._rulebases = {}
+        self._states = {}
 
     def add_universe(self, universe):
         """
@@ -32,11 +33,31 @@ class Engine:
             raise ValueError('The rulebase "{}" has already added to the engine!'.format(rulebase.name))
         self._rulebases[rulebase.name] = rulebase
 
-    def calc_consequences(self, antecedent_values):
+    def set_state(self, name, value):
+        """
+        Set the given state value by name.
+        :param name: the name of the input
+        :param value: the float value of the input
+        :return: None
+        """
+        self._states[name] = value
+
+    def get_state(self, name):
+        """
+        Get the given state value by name
+        :param name: the name of the input
+        :return: the state value as a float
+        """
+        return self._states[name]
+
+    def calc_consequences(self, observations):
         """
         Calculate the consequences of the available rule bases.
-        :param antecedent_values: the values of the antecedents in a dictionary
+        :param observations: the values of the antecedents in a dictionary
         :return: the consequences in a dictionary with rule base names
         :raise ValueError: when there is an invalid antecedent name in the input dictionary
         """
-        pass
+        next_states = self._states.copy()
+        for rulebase_name, rulebase in self._rulebases.items():
+            next_states[rulebase_name] = rulebase.calc_consequence(self._universes, observations)
+        self._states = next_states
