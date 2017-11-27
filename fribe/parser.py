@@ -19,10 +19,14 @@ class TokenClassifier(classifier.Classifier):
         :param token: the considered token
         :return: True, when the token is in the given class, else False
         """
-        if token_class in ['text', 'number']:
+        if token.type in ['text', 'number']:
             return token_class == token.type
+        elif token.type == 'keyword':
+            return token_class == token.value
+        elif token.type == 'empty':
+            return token_class == 'empty'
         else:
-            return token.type == 'keyword' and token_class == token.value
+            raise ValueError('Unexpected token! ({}, {})'.format(token.type, token.value))
 
 
 class Parser(parser.Parser):
@@ -48,6 +52,7 @@ class Parser(parser.Parser):
         :param token: the considered token
         :return: None
         """
+        # print('# ' + operation + ' ({}, {})'.format(token.type, token.value))
         # TODO: Use a dedicated class for processing with the appropriate method names!
         if operation == 'create_universe':
             self._universe = Universe()
@@ -56,7 +61,7 @@ class Parser(parser.Parser):
         elif operation == 'set_universe_description':
             self._universe.set_description(token.value)
         elif operation == 'create_term':
-            self._term = Term()
+            self._term = Term(token.value)
         elif operation == 'set_center':
             self._term.set_center(float(token.value))
         elif operation == 'set_value':
@@ -94,4 +99,4 @@ class Parser(parser.Parser):
 
     def show_error(self, message, token):
         """Signs an error condition."""
-        raise ValueError(message)
+        raise ValueError('{} ({}, {})'.format(message, token.type, token.value))
