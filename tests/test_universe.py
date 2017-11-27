@@ -40,4 +40,4 @@ class UniverseTest(unittest.TestCase):
         universe.add_term(a)
         universe.add_term(b)
         distance = universe.calc_distance(2, 7)
-        self.assertEqual(distance, 1.5)
+        self.assertEqual(distance, 0.5)

@@ -2,23 +2,23 @@ expression "tokenizer"
 nodes
 1 start "" 74 247
 2 finish "" 1190 357
-3 token "a-Z" 821 195
+3 token "a-Z" 751 195
 4 token "\"" 265 209
 5 token "-" 362 623
-6 token "0-9" 618 684
-7 token "." 831 623
-8 token "0-9" 1062 613
+6 token "0-9" 554 685
+7 token "." 813 623
+8 token "0-9" 1023 611
 9 connection "" 257 305
-10 stack "" 485 691
+10 stack "" 452 691
 11 connection "" 986 317
 12 stack "" 255 622
-13 stack "" 725 622
-14 stack "" 953 590
+13 stack "" 716 622
+14 stack "" 922 581
 15 connection "" 130 135
 16 clean "" 144 692
-17 clean "" 554 204
-18 stack "" 702 206
-19 operation "keyword" 965 195
+17 clean "" 521 203
+18 stack "" 634 204
+19 operation "keyword" 971 202
 20 clean "" 382 208
 21 token "\\" 523 314
 22 stack "" 664 315
@@ -39,21 +39,26 @@ nodes
 38 finish "" 659 575
 39 default_token "" 593 144
 40 router "empty" 1162 248
+41 except_router "a-Z" 869 201
+42 except_router "0-9" 663 686
+43 except_router "0-9" 1126 610
+44 error "Missing digit after floating point!" 915 652
+45 finish "" 1017 651
+46 except_router "." 807 687
 edges
 1 15
 3 18
-3 19
+3 41
 4 20
 5 10
 5 13
 5 37
 6 10
-6 13
-6 30
+6 42
 7 14
-7 30
+7 44
 8 14
-8 30
+8 43
 9 21
 9 25
 9 27
@@ -69,6 +74,7 @@ edges
 15 39
 16 10
 16 12
+16 13
 17 18
 18 3
 19 29
@@ -92,4 +98,10 @@ edges
 37 38
 39 29
 40 2
+41 19
+42 13
+42 46
+43 30
+44 45
+46 30
 
