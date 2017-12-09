@@ -84,17 +84,16 @@ class Universe(object):
         :param x: a real value
         :return: the two nearest terms at the left and right side of x
         """
+        # TODO: Experimental bug fix. Create test cases!
         terms = sorted(self._terms.values(), key=lambda term: term.center)
         i = 0
         while i < len(terms):
             if terms[i].center == x:
                 return terms[i], terms[i]
-            elif terms[i].center < x:
-                if i < len(terms) - 1:
-                    return terms[i], terms[i + 1]
-                else:
-                    raise ValueError('The value {} is above the domain!'.format(x))
-        raise ValueError('The value {} is below the domain!'.format(x))
+            elif terms[i].center < x < terms[i + 1].center:
+                return terms[i], terms[i + 1]
+            i += 1
+        raise ValueError('The value {} is out of the domain!'.format(x))
 
     @staticmethod
     def interpolate(x0, y0, x1, y1, x):
