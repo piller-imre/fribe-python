@@ -3,7 +3,7 @@ Engine class definition
 """
 
 
-class Engine:
+class Engine(object):
     """Represents the behavior engine."""
 
     def __init__(self):
