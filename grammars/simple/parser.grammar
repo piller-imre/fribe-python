@@ -17,16 +17,16 @@ nodes
 15 token "text" 563 406
 16 token "description" 665 405
 17 token "text" 957 406
-18 token "rule" 264 538
-19 token "description" 206 625
-20 token "text" 461 624
-21 token "text" 551 539
-22 token "when" 655 538
-23 token "text" 715 717
-24 token "is" 816 718
-25 token "text" 1073 720
-26 token "and" 896 652
-27 token "end" 1066 548
+18 token "rule" 252 643
+19 token "description" 158 740
+20 token "text" 454 734
+21 token "text" 577 641
+22 token "when" 745 642
+23 token "text" 732 848
+24 token "is" 856 849
+25 token "text" 1121 849
+26 token "and" 817 754
+27 token "end" 1060 646
 28 operation "create_universe" 153 103
 29 operation "set_universe_name" 384 103
 30 operation "set_universe_description" 284 208
@@ -37,20 +37,24 @@ nodes
 35 operation "create_rulebase" 168 405
 36 operation "set_rulebase_name" 407 403
 37 operation "set_rulebase_description" 767 404
-38 operation "create_rule" 158 539
+38 operation "create_rule" 83 650
 39 operation "add_universe" 937 105
-40 operation "add_rule" 1178 550
+40 operation "add_rule" 1220 647
 41 operation "add_rulebase" 1164 395
-42 operation "set_rule_description" 303 624
-43 operation "create_predicate" 600 641
-44 operation "set_consequence" 408 538
-45 operation "set_predicate_name" 547 717
-46 operation "set_predicate_value" 915 720
-47 operation "add_predicate" 1174 721
+42 operation "set_rule_description" 300 737
+43 operation "create_predicate" 583 739
+44 operation "set_consequence" 401 642
+45 operation "set_predicate_name" 539 849
+46 operation "set_predicate_value" 953 848
+47 operation "add_predicate" 940 746
 48 token "end" 1064 394
-49 ground "" 77 702
-50 error "Invalid token!" 180 703
-51 finish "" 305 704
+49 ground "" 81 865
+50 error "Invalid token!" 192 866
+51 finish "" 322 867
+52 token "dominated" 683 559
+53 token "by" 808 558
+54 operation "set_dominant_rulebase" 911 558
+55 token "text" 1093 561
 edges
 1 11
 3 29
@@ -74,6 +78,7 @@ edges
 15 38
 16 37
 17 38
+17 52
 18 19
 18 44
 19 42
@@ -111,4 +116,8 @@ edges
 48 41
 49 50
 50 51
+52 53
+53 54
+54 55
+55 38
 
