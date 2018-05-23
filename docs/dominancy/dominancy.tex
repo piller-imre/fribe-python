@@ -79,42 +79,87 @@
 \begin{document}
 
 \begin{center}
-    \Large \textbf{Dominancy}
+    \Large \textbf{Fuzzy Rule Interpolation with Dominancy}
 \end{center}
 
 \section{Introduction}
 
-We use \textit{conjunction between predicates} and \textit{disjunction between rules}.
+The \textit{Fuzzy Rule Interpolation} is an intuitive method for describing fuzzy rulebases in continuous space. The presented concept introduces the dominancy as the way of handling contradictionary cases.
 
-We would like to extend the expressive power of the behavior description language by using negation. The fundamental problem is that in the case of multi-valued logic the negation cannot be defined.
+\section{Rule Surfaces}
 
-\section{Rule surface calculation}
+Let define the space of \textit{antecedent dimensions}. We assume that we have $n$ antecedents, which are real-valued. In this case the search space is $\mathbb{R}^n$. Let denote $r_i \in \mathbb{R}^n$ a rule, which actually a point of the space.
 
-\section{One-dimensional case}
+We use a further, so called \textit{consequent dimension}. It also has real values. We assign a consequent value for any rule points. This value at the given point shows the response/output of the system. We can allow lower dimension rules also.
 
-We assume that
+Our goal is to define a rule surface which able to \textit{interpolate} the consequent value between the defined rule points.
+
+\begin{question}{Have we consider separately the extrapolation case?}
+\end{question}
+
+\section{Contradictions}
+
+The rule surface is an $\mathbb{R}^n \rightarrow \mathbb{R}$ mapping. In the assumption of interpolation, we cannot use different consequent values for the same antecedent value.
 \begin{itemize}
-\item the consequent value of the bounds of the universe has defined with rules, and
-\item there is no contradiction in the rulebases.
+\item It can be checked easily, when all of the rules have $n$ dimensions.
+\item The checking of lower dimensional rules are more time consuming, but the calculation is straightforward.
 \end{itemize}
-These are necessary for the interpolation. The rules at the bounds makes the default values optional, because any inner point can be interpolated from the neightbour rules.
 
-From these reasons we have to use at least two rules on any universe. For instance, let consider a simple rulebase $\left\{ x = 0 \Rightarrow c = 0, x = 1 \Rightarrow c = 1 \right\}$. We would like to express the $x \neq 0$ and $x \neq 1$ relations. We would like to avoid the negation on the antecedent side. Instead, we use a default value for cases, where the rule does not match. (In the case of interpolation it does not require exact matching.) For making the rulebase consistent we have to use the same default value for $x \neq 0$ and $x \neq 1$. From illustrative reasons, we choose $2$ as the default value.
+We would like to hold that all the defined rule antecedents result the defined consequents. We would like to resolve the contradictions by introducing the concept of \textit{dominancy}.
 
-The exact shape of the rulebase \textit{surface} (currently a curve) depends on the interpolation function. In general, we can say that $c(0.5) \in [0.5, 2]$.
+\section{Distances and Weights}
 
-For any higher dimension we have to use the same default value for the rulebase. It is necessary, for avoiding contradictions. For example $c(0.2) = 2$ and $c(0.2) = 3$ in this case.
+We can calculate the distance of the observation and a rule. Let $x \in \mathbb{R}^n$ the observation and $r \in \mathbb{R}$ a rule. Let denote $d_j$ the distance of the rule and the observation according the the $j$-th antecedent dimension. Therefore we can calculate the rule distance as
+$$
+\delta(x, r) =
+\dfrac{
+	\sqrt{\displaystyle \sum_{j=1}^{k} d_{j}^{2}}
+}{
+	\sqrt{k}
+}.
+$$
+(The $k$ is the number of antecedent dimensions in the rule, $k \leq n$.)
 
-Therefore, the dominated surface must be constant in the case of negation, for avoiding contradictions.
+We define the weight as
+$$
+w(x, r) = \dfrac{1}{\delta(x, r)}.
+$$
 
-Unfortunately, the sample rulebase has also contains contradiction, for example $c(0) = 0$ (according to $x = 0 \Rightarrow c = 0$), but $c(0) = 2$ (according to $x \neq 1 \Rightarrow c = 2$). Symmetrically, $c(1) = 1$ (according to $x = 1 \Rightarrow c = 1$), but $c(1) = 2$ (according to $x \neq 0 \Rightarrow c = 2$).
+\begin{question}{Can we avoid somehow the consideration of infinit values?}
+\end{question}
 
-\section{Two-dimensional case}
+\section{Dominancy}
 
-Commutativity of dominancy application
+The dominancy is a relation between the rulebases. We have to distinguish the \textit{dominating} and the \textit{dominated} rulebase. (All rulebase can have at most 1 dominant rulebase, which results a tree structure.)
 
-De Morgan rule
+\begin{verbatim}
+rulebase "A"
+    ...
+end
 
-\section{Three-dimensional case}
+rulebase "B"
+   dominated by "A"
+   ...
+end
+\end{verbatim}
+
+In this case the rulebase $B$ has dominated by the rulebase $A$.
+
+Let denote $a$ the consequence of $A$ and $b$ is the consequence of $B$. Let $d$ the aggregated (in simple case the minimal) normalized distance of the observation from the rules of the dominant rulebase. We can calculate the consequence as
+$$
+c = (1 - d) \cdot a + d \cdot b.
+$$
+As we can see, it results $a$ when the dominant rulebase matches. The normalization guarantees that the maximal distance is 1. In that case the result will be $b$ (which means that the dominant rulebase does not affect the result).
+
+\begin{question}{Should we consider all of the dominant rules or just the closest one?}
+\end{question}
+
+\section{Evaluation}
+
+For evaluating the dominant rulebase, we have to consider the followings.
+\begin{itemize}
+\item We have to check that there is no circle in the dominancy graph.
+\item We must evaluate the most dominant rulebases first.
+\end{itemize}
 
 \end{document}
