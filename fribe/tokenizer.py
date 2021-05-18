@@ -3,7 +3,7 @@ from exprail import parser
 from exprail.token import Token
 
 
-class CharClassifier(classifier.Classifier):
+class CharClassifier(object):
     """Class for classifying the input characters"""
 
     @staticmethod

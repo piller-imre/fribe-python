@@ -8,7 +8,7 @@ from fribe.term import Term
 from fribe.universe import Universe
 
 
-class TokenClassifier(classifier.Classifier):
+class TokenClassifier(object):
     """Class for classifying the input tokens"""
 
     @staticmethod
