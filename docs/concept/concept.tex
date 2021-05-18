@@ -1,0 +1,174 @@
+\documentclass[a4paper,12pt]{article}
+
+% Set margins
+\usepackage[hmargin=2.5cm, vmargin=3cm]{geometry}
+
+\frenchspacing
+
+% Language packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+% \usepackage[magyar]{babel}
+
+% AMS
+\usepackage{amssymb,amsmath}
+
+% Graphic packages
+\usepackage{graphicx}
+
+% Colors
+\usepackage{color}
+\usepackage[usenames,dvipsnames]{xcolor}
+
+% Enumeration
+\usepackage{enumitem}
+
+% Links
+\usepackage{hyperref}
+
+% Question
+\newenvironment{question}[1]
+{\noindent\textcolor{OliveGreen}{$\circ$ \textit{#1}}
+
+\smallskip
+
+\color{Gray}
+
+}{\bigskip}
+
+% Task
+\newenvironment{task}[1]
+{\noindent\textcolor{RoyalBlue}{$\circ$ \textit{#1}}
+
+\smallskip
+
+\color{Gray}
+
+}{\bigskip}
+
+% Notification
+\newenvironment{notification}[1]
+{\noindent\textcolor{Peach}{$\circ$ \textit{#1}}
+
+\smallskip
+
+\color{Gray}
+
+}{\bigskip}
+
+% Problem
+\newenvironment{problem}[1]
+{\noindent\textcolor{OrangeRed}{$\circ$ \textit{#1}}
+
+\smallskip
+
+\color{Gray}
+
+}{\bigskip}
+
+% Solution
+\newenvironment{solution}
+{\noindent\color{Violet}}{\bigskip}
+
+% Starred
+\newenvironment{starred}
+{\noindent\color{Maroon}}{\bigskip}
+
+% QUEST: How can we guarantee that there is no contradiction in the rulebase (with negated symbols)?
+
+\begin{document}
+
+\begin{center}
+    \Large \textbf{Fuzzy Rule Based Inference}
+\end{center}
+
+\section{Universe function}
+
+Let denote $u: \mathbb{R} \rightarrow \mathbb{R}$ the \textit{universe} function, which defines the non-linear scaling in the antecedent (\textit{input}) space.
+Each dimension has their own universe function.
+
+A universe defined by symbol centers and their scaling values.
+\begin{itemize}
+    \item Each symbol has a meaningful name (\textit{language variable}).
+    \item The domain of $u$ is the range of the given antecedent dimension.
+\end{itemize}
+
+The function itself is the primitive function of the scaling function:
+\[
+u(x) = \int_{-\infty}^{x} \! s(t) \; \mathrm{d}t.
+\]
+
+\section{Distance calculation}
+
+\subsection{Distances on the universe}
+
+\[
+\delta(x_a, x_b) = |u(x_a) - u(x_b)|.
+\]
+
+It should be normalized to $[0, 1]$ interval.
+\begin{itemize}
+    \item 0: it is a symbol point (the weight of the symbol is maximal),
+    \item 1: it is the maximal distance from the given symbol point.
+\end{itemize}
+
+\subsection{Rule distance}
+
+The distance calculation is an $n$-ary function, where $n$ is the number of antecedent dimension of the rule.
+\[
+\delta_r = \dfrac{\sum_i \delta_i^2}{\sqrt{n}},
+\]
+where $\delta_i$ is the distance of $i^{\text{th}}$ statement of the antecedent part.
+
+\subsection{Calculation of the consequent}
+
+Let denote $(\delta_i, c_i)$ the distance and value of the given rules.
+The consequence of the rulebase can be calculated as
+\[
+w_i = \dfrac{1}{\delta_i^2},
+\quad
+C = \dfrac{\sum_i w_i \cdot c_i}{\sum_i w_i}.
+\]
+
+\section{Is it an interpolation?}
+
+From theoretical viewpoint the method is an interpolation, when
+\begin{itemize}
+    \item[a)] there are symbols at the minimum and maximum point of all universes, and
+    \item[b)] the rulebases are contradiction free.
+\end{itemize}
+The a) means that, we require at least two symbols from the expert for all universes. Any input value out of this interval causes range error.
+
+The b) in a simple case means that we should check the cases, when the $x$ value of the symbols (in the considered dimension) is the same.
+
+It is harder to check and guarantee, that the rulebase can remain contradiction free in higher dimensions, especially when the number of dimensions are different for rules, and their dimensions are occasionally only overlap each others.
+
+\begin{itemize}
+    \item When only the b) has fulfilled, it results \textit{extrapolation}.
+    \item Without b) it is an \textit{approximation} method.
+\end{itemize}
+
+\section{Is the $u$ a monotonic function?}
+
+\emph{The primitive function of any, non-negative function is monotonic.}
+
+Let assume that $u(x_a) = u(x_b)$ when $x_a \neq x_b$. It is possible for any non-monotonic case. (In special case, when $x_a = \min D_u$ and $x_b = \max D_u$, means that the distance of the largest distance is 0.)
+
+From practical point of view, we can consider the symbol point only as measured/estimated points. By calculating the nearest symbol point for distance calculation it can results valid values (but it differ conceptually from the original idea).
+
+There is also a possibility to simplify the scaling by ignoring the $y$ values of the symbols, and calculate symbol distance by (for instance) the following formula:
+\[
+\delta_u(x) = |x - x_r|,
+\]
+where $x_r$ is the nearest rule center of the $x$ value.
+
+\section{Relation to fuzzy systems}
+
+The \textit{fuzziness} of the method comes from the
+\begin{itemize}
+    \item language variables,
+    \item the rulebase which has given by experts,
+    \item the robustness of the calculations for uncertain and noisy input values.
+\end{itemize}
+
+\end{document}
