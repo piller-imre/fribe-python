@@ -116,7 +116,7 @@ It should be normalized to $[0, 1]$ interval.
 
 The distance calculation is an $n$-ary function, where $n$ is the number of antecedent dimension of the rule.
 \[
-\delta_r = \dfrac{\sum_i \delta_i^2}{\sqrt{n}},
+\delta_r = \dfrac{\sqrt{\sum_i \delta_i^2}}{\sqrt{n}},
 \]
 where $\delta_i$ is the distance of $i^{\text{th}}$ statement of the antecedent part.
 
@@ -170,5 +170,53 @@ The \textit{fuzziness} of the method comes from the
     \item the rulebase which has given by experts,
     \item the robustness of the calculations for uncertain and noisy input values.
 \end{itemize}
+
+\section{Function domains and ranges}
+
+\subsection{Dimension distance}
+
+Input:
+\begin{itemize}
+	\item set of $(x, y)$ pairs (optionally with their names),
+	\item center ($x_0$ value) of the considered symbol (or its name),
+	\item the observed value ($x$).
+\end{itemize}
+Output: normalized distance, $\delta \in [0, 1]$.
+
+\medskip
+
+\noindent Example: Let denote $f: \mathbb{R} \rightarrow \mathbb{R}$ a continuous function, as the linear interpolation of the points $(x, y)$. Then
+\[
+\delta(x, x_0) = \left| f(x) - f(x_0) \right|.
+\]
+
+\subsection{Rule distance}
+
+It is a $[0, 1]^n \rightarrow [0, 1]$ function.
+
+\medskip
+
+\noindent Example:
+\[
+\delta_r(\delta_1, \ldots, \delta_n) = \dfrac{\sqrt{\sum_{i=1}^{n} \delta_i^2}}{\sqrt{n}}.
+\]
+
+\subsection{Consequent calculation}
+
+Input: set of $(c, \delta_r)$ pairs, where
+\begin{itemize}
+	\item $c \in \mathbb{R}$, consequent value of the rule,
+	\item $\delta_r$ distance of the rule from the observation.
+\end{itemize}
+Output: the resulted consequent of the rulebase, as a real value.
+
+\medskip
+
+\noindent Example: Shepherd interpolation: 
+\[
+w(\delta_i) = \delta_i^{-2},
+\quad
+C(c, \delta_r) = \dfrac{\sum_i w(\delta_i) \cdot c_i}{\sum_i w(\delta_i)}.
+\]
 
 \end{document}
