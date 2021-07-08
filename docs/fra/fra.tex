@@ -1,0 +1,205 @@
+\documentclass[a4paper,12pt]{article}
+
+% Set margins
+\usepackage[hmargin=2.5cm, vmargin=3cm]{geometry}
+
+\frenchspacing
+
+% Language packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+% \usepackage[magyar]{babel}
+
+% AMS
+\usepackage{amssymb,amsmath}
+
+% Graphic packages
+\usepackage{graphicx}
+
+% Colors
+\usepackage{color}
+\usepackage[usenames,dvipsnames]{xcolor}
+
+% Enumeration
+\usepackage{enumitem}
+
+% Links
+\usepackage{hyperref}
+
+\begin{document}
+
+\begin{center}
+    \Large \textbf{Fuzzy Rule Approximation}
+\end{center}
+
+\section{Introduction}
+
+Inputs, changed by the environment
+
+The behavior engine works iteratively.
+We can consider any state variable as an output.
+
+The explanation uses zero-based indexing, because most of the programming languages follow this convention also. It hopefully helps the implementation of the proposed method.
+
+\section{Language Variables}
+
+In the proposed behavior description method we can define names for the measures/amounts.
+\begin{itemize}
+    \item A name cannot contain spaces.
+    \item The names are case sensitive.
+    \item It cannot start with number.
+    \item It cannot contains dot.
+    \item It cannot be a keyword.
+\end{itemize}
+A language variable is a \{name, value\} pair.
+For instance
+\begin{verbatim}
+high is 30
+\end{verbatim}
+means that the 30 is a \emph{high} value on a particular dimension, metric, amount or measure.
+This expression also can be considered as a \textit{statement}.
+
+\section{Universe of Discourse}
+
+A \textit{universe} is an ordered set of language variables, which can be referred by their name or by their index. The pairs are ordered by the values in ascending order.
+
+Let denote $U$ a universe.
+\begin{itemize}
+    \item $|U|$ is the number of pairs in the set.
+    \item $U[0]$ is the \emph{first} value.
+    \item $U[a]$ is the value of language variable $a$.
+    \item $\min(U)$ is the minimal value of $U$.
+    \item $\max(U)$ is the maximal value of $U$.
+\end{itemize}
+
+For instance, let define the universe of distance in the following way.
+
+\begin{verbatim}
+In the universe of distance
+  0 is close and
+  10 is medium and
+  50 is far.
+\end{verbatim}
+
+In this case
+\[
+|U| = 3, U[0] = 0, U[1] = 10, U[2] = 50, U[\text{close}] = 0, U[\text{medium}] = 10, U[\text{far}] = 50.
+\]
+
+\section{Distances on the universe}
+
+We would like to approximate the distance between an observation and a language variable on a given universe.
+
+Let consider a universe $U$, an observation $x$ and a language variable $a$.
+The distance of $x$ can be calculated as
+\[
+\delta(U, x, a) =
+\dfrac{|x - U[a])|}{\max(U) - \min(U)}.
+\]
+It is easy to see, that the maximal distance in the universe is 1.
+
+For instance, let $x = 20$.
+\begin{align*}
+&\delta(U, 20, \text{close}) = 0.4, \\
+&\delta(U, 20, \text{medium}) = 0.2, \\
+&\delta(U, 20, \text{high}) = 0.6. \\
+\end{align*}
+
+\section{Rules}
+
+For illustration, let define universes for battery charge level and speed.
+\begin{verbatim}
+In the universe of charge_level
+  0 is low and
+  100 is high.
+
+In the universe of speed
+  0 is slow and
+  30 is fast.
+\end{verbatim}
+
+A rule defines the relation between inputs and outputs. Therefore, a rule has two parts:
+\begin{itemize}
+    \item \textit{antecedent}: the input side of the rule,
+    \item \textit{consequent}: the output side of the rule.
+\end{itemize}
+
+The consequent always contains only one statement, while the antecedent part can contains arbitrary number of statements joined by the \texttt{and} keyword. From this reason, we prefer to write the consequent part of the statement at the beginning of the rules.
+
+\begin{verbatim}
+The speed is slow when
+  distance is medium and
+  charge_level is low.
+
+The speed is fast when
+  charge_level is high.
+\end{verbatim}
+
+A rule is a point the space of antecedent and consequent dimension. In this particular example, we are in three dimensional space ($\text{distance} \times \text{battery\_level} \times \text{speed}$). The first rule is a point (can be expressed by values as $(10, 0, 0)$). The second rule is a line (or by considering the bounds for this example a line segment of $(d, 100, 30), d \in [0, 50]$).
+
+\section{Rule Distances}
+
+For the further calculations, we have to define the distance of an observation and a rule. The distance from the rule is only depends on the antecedent part of the rule.
+We can calculate the distances of the statements individually on all universes. Let denote $\delta_0, \ldots, \delta_{(k-1)}$ these distances for a rule with $k$ statements.
+\[
+\textbf{s} = (\delta_0, \ldots, \delta_{(k-1)}) \in [0, 1]^k,
+\]
+\[
+\displaystyle
+\rho(\textbf{s}) =
+\sqrt{\dfrac{\sum_{i=0}^{k-1} \delta_i^2}{k}}
+\in [0, 1].
+\]
+It is the normalized Euclidean distance in the $k$-dimensional space.
+
+\section{Calculation of the Consequences}
+
+Let denote $c_i$ the consequent value of the rules at index $i$. We would like to calculate the consequent of the rulebase.
+
+Let denote the pairs of consequent values and the corresponding rule distances by $\textbf{r}$:
+\[
+\textbf{r} = \{(c_0, \rho_0), (c_1, \rho_1), \ldots, (c_{m-1}, \rho_{m-1})\}
+\]
+The operator $\sigma$ for consequent calculation can be defined as:
+\[
+\sigma(\textbf{r}) = \dfrac{\sum_{i} w_i \cdot c_i}{\sum_{i} w_i},
+\quad w_i = \dfrac{1}{\rho_i^2}.
+\]
+
+
+\section{Rulebases and Surfaces}
+
+Let assume that we have $n$ input dimensions. A rulebase definition results an $n + 1$ dimensional rule surface.
+
+\section{Connection of the Rulebases}
+
+\section{Evaluation and Usage}
+
+\section{Example}
+
+\section{Approximation}
+
+\begin{verbatim}
+In universe x
+  0 is low and
+  1 is high.
+
+In universe y
+  0 is low and
+  1 is high.
+
+In universe z
+  0 is low and
+  1 is high.
+
+The z is low when y is low.
+The z is low when y is high.
+The z is high when x is low.
+The z is high when x is high.
+\end{verbatim}
+
+There is no $\delta, \rho, \sigma$ operators, which is able to interpolate all of the rule points.
+
+For most of the operators, the set of rules and the rule surface are disjoint.
+
+\end{document}
