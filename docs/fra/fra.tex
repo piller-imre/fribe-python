@@ -34,12 +34,40 @@
 
 \section{Introduction}
 
-Inputs, changed by the environment
+The fundamental goal is to model states and their transitions.
+We call \textit{state} all of the values of the considered system.
+We can refer to their components as \textit{state variables}.
+Therefore, the state is the set of the considered state variables.
+Let denote $S$ the state which contains $n$ state variables:
+\[
+S = \{s_0, s_1, \ldots, s_{n-1}\}.
+\]
 
-The behavior engine works iteratively.
-We can consider any state variable as an output.
+(The explanation uses zero-based indexing, because most of the programming languages follow this convention also. It hopefully helps the implementation of the proposed method.)
 
-The explanation uses zero-based indexing, because most of the programming languages follow this convention also. It hopefully helps the implementation of the proposed method.
+The proposed behavior engine uses continuous space for the available states ($S \subseteq \mathbb{R}^n$) and it is discrete in time.
+Let denote $S_0$ the initial state of the system.
+The behavior engine can be denoted as a function $\mathcal{B}$:
+\[S_{i+1} = \mathcal{B}(S_i).\]
+
+From practical reasons we can categorize state variables into three different groups.
+\begin{itemize}
+    \item \textit{input}: Its value determined by the environment of the system.
+    \item \textit{internal} or \textit{hidden}: It is necessary for and internal calculations and proper state transitions, but its value does not provide any useful information.
+    \item \textit{output}: Its value considered as the result of the calculation.
+\end{itemize}
+
+From the aspect of the behavior engine this categorization is not necessary.
+As a brief overview of the usage of the behavior engine can be described by the following steps.
+\begin{enumerate}
+    \item Define the state variables of the system.
+    \item Define the relation of the state variables by rules.
+    \item Set the initial values ($S_0$).
+    \item Evaluate the rules and determine the next state.
+    \item Read the values of the state variables (which are considered as outputs).
+    \item Set the values of the state variables (which are considered as inputs).
+    \item Continue from step 4.
+\end{enumerate}
 
 \section{Language Variables}
 
@@ -54,10 +82,11 @@ In the proposed behavior description method we can define names for the measures
 A language variable is a \{name, value\} pair.
 For instance
 \begin{verbatim}
-high is 30
+  high is 30
 \end{verbatim}
 means that the 30 is a \emph{high} value on a particular dimension, metric, amount or measure.
-This expression also can be considered as a \textit{statement}.
+(The behavior engine cannot consider its meaning.)
+This expression is called \textit{statement}.
 
 \section{Universe of Discourse}
 
@@ -89,8 +118,9 @@ In this case
 \section{Distances on the universe}
 
 We would like to approximate the distance between an observation and a language variable on a given universe.
+We have to define a \textit{distance operator} $\delta$ for the calculation.
 
-Let consider a universe $U$, an observation $x$ and a language variable $a$.
+Let consider a universe $U$, an observation $x \in \mathbb{R}$ and a language variable called $a$.
 The distance of $x$ can be calculated as
 \[
 \delta(U, x, a) =
@@ -98,7 +128,7 @@ The distance of $x$ can be calculated as
 \]
 It is easy to see, that the maximal distance in the universe is 1.
 
-For instance, let $x = 20$.
+For instance, for the previous example let $x = 20$. Then
 \begin{align*}
 &\delta(U, 20, \text{close}) = 0.4, \\
 &\delta(U, 20, \text{medium}) = 0.2, \\
@@ -135,11 +165,13 @@ The speed is fast when
   charge_level is high.
 \end{verbatim}
 
-A rule is a point the space of antecedent and consequent dimension. In this particular example, we are in three dimensional space ($\text{distance} \times \text{battery\_level} \times \text{speed}$). The first rule is a point (can be expressed by values as $(10, 0, 0)$). The second rule is a line (or by considering the bounds for this example a line segment of $(d, 100, 30), d \in [0, 50]$).
+A rule is a point in the space of antecedent and consequent dimension. In this particular example, we are in three dimensional space ($\text{distance} \times \text{battery\_level} \times \text{speed}$). The first rule is a point in a typical sense (can be expressed by values as $(10, 0, 0)$). The second rule is a line (or by considering the bounds for this example a line segment of $(d, 100, 30), d \in [0, 50]$).
 
 \section{Rule Distances}
 
-For the further calculations, we have to define the distance of an observation and a rule. The distance from the rule is only depends on the antecedent part of the rule.
+For the further calculations, we have to define the distance of an observation and a rule.
+Let denote its operator by $\rho$.
+The distance from the rule is only depends on the antecedent part of the rule.
 We can calculate the distances of the statements individually on all universes. Let denote $\delta_0, \ldots, \delta_{(k-1)}$ these distances for a rule with $k$ statements.
 \[
 \textbf{s} = (\delta_0, \ldots, \delta_{(k-1)}) \in [0, 1]^k,
@@ -166,16 +198,19 @@ The operator $\sigma$ for consequent calculation can be defined as:
 \quad w_i = \dfrac{1}{\rho_i^2}.
 \]
 
+When $\exists i$, where $\rho_i = 0$, then we have to collect all possible $\rho$ values where the distance is also 0, and calculate the mean of their corresponding consequent values as the result.
 
 \section{Rulebases and Surfaces}
 
-Let assume that we have $n$ input dimensions. A rulebase definition results an $n + 1$ dimensional rule surface.
+The defined rules results a \textit{rule surface} in the higher dimensional space.
 
-\section{Connection of the Rulebases}
+% \section{Connection of the Rulebases}
 
-\section{Evaluation and Usage}
+% \section{Evaluation and Usage}
 
-\section{Example}
+% \section{Example}
+
+\pagebreak
 
 \section{Approximation}
 
