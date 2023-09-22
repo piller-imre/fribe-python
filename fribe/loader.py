@@ -17,11 +17,11 @@ def load_engine_from_string(source):
     """
     package_directory = os.path.dirname(os.path.abspath(__file__))
     char_source = SourceString(source)
-    char_classifier = CharClassifier.is_in_class
+    char_classifier = CharClassifier
     tokenizer_path = os.path.join(package_directory, '../grammars/simple/tokenizer.grammar')
     tokenizer_grammar = Grammar(filename=tokenizer_path, classifier=char_classifier)
     tokenizer = Tokenizer(tokenizer_grammar, char_source)
-    token_classifier = TokenClassifier.is_in_class
+    token_classifier = TokenClassifier
     parser_path = os.path.join(package_directory, '../grammars/simple/parser.grammar')
     parser_grammar = Grammar(filename=parser_path, classifier=token_classifier)
     parser = Parser(parser_grammar, tokenizer)
