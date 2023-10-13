@@ -11,6 +11,14 @@ class Engine(object):
         self._rulebases = {}
         self._states = {}
 
+    @property
+    def universe_names(self):
+        return list(self._universes.keys())
+
+    @property
+    def rulebase_names(self):
+        return list(self._rulebase_names.keys())
+
     def add_universe(self, universe):
         """
         Add a new universe object to the engine.
